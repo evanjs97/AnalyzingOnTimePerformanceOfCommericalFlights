@@ -7,6 +7,7 @@ import hadoop.reducer.*;
 import hadoop.util.AverageDelayWritable;
 import hadoop.util.DoubleTextWritable;
 import hadoop.util.IntTextWritable;
+import hadoop.util.LateAircraftWritable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
@@ -46,6 +47,9 @@ public class Entry {
 				break;
 			case "coast":
 				runCoastDelays(job, args);
+				break;
+			case "late":
+				runLateAircraftDelays(job, args);
 				break;
 		}
 //		job.setCombinerClass(TaskSevenCombiner.class);
@@ -115,6 +119,16 @@ public class Entry {
 		job.setMapOutputValueClass(AverageDelayWritable.class);
 		job.setCombinerClass(WeatherDelayCombiner.class);
 		job.setReducerClass(EastWestCoastReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(NullWritable.class);
+	}
+
+	public static void runLateAircraftDelays(Job job, String[] args) throws IOException {
+		job.setMapperClass(LateAircraftMapper.class);
+		FileInputFormat.addInputPath(job, new Path(args[1]));
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(LateAircraftWritable.class);
+		job.setReducerClass(LateAircraftReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(NullWritable.class);
 	}
