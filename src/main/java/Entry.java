@@ -1,13 +1,7 @@
-import hadoop.combiner.BusiestAirportCombiner;
-import hadoop.combiner.CarrierDelayCombiner;
-import hadoop.combiner.MinimizeDelayCombiner;
-import hadoop.combiner.WeatherDelayCombiner;
+import hadoop.combiner.*;
 import hadoop.mapper.*;
 import hadoop.reducer.*;
-import hadoop.util.AverageDelayWritable;
-import hadoop.util.DoubleTextWritable;
-import hadoop.util.IntTextWritable;
-import hadoop.util.LateAircraftWritable;
+import hadoop.util.*;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
@@ -50,6 +44,9 @@ public class Entry {
 				break;
 			case "late":
 				runLateAircraftDelays(job, args);
+				break;
+			case "sumLate":
+				runLateAircraftSummarizer(job, args);
 				break;
 		}
 //		job.setCombinerClass(TaskSevenCombiner.class);
@@ -129,6 +126,18 @@ public class Entry {
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(LateAircraftWritable.class);
 		job.setReducerClass(LateAircraftReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(NullWritable.class);
+	}
+
+	public static void runLateAircraftSummarizer(Job job, String[] args) throws IOException {
+		MultipleInputs.addInputPath(job, new Path(args[1]), TextInputFormat.class, LateAircraftSummarizeMapper.class);
+		MultipleInputs.addInputPath(job, new Path(args[2]), TextInputFormat.class, LateAircraftAiportMapper.class);
+		MultipleInputs.addInputPath(job, new Path(args[3]), TextInputFormat.class, LateAircraftCarrierMapper.class);
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(LateAircraftSummarizeWritable.class);
+		job.setCombinerClass(LateAircraftSummarizeCombiner.class);
+		job.setReducerClass(LateAircraftSummarizeReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(NullWritable.class);
 	}

@@ -39,6 +39,14 @@ public class Utils {
 	public static String getMonth(int month) {
 		return months[month];
 	}
+
+	public static String formatDayOfMonth(int day) {
+		int mod = day % 10;
+		if(mod == 1) return day + "st";
+		else if(mod == 2) return day + "nd";
+		else if(mod == 3) return day + "rd";
+		else return day + "th";
+	}
 	
 	public static boolean isNumber(String num) {
 		try {

@@ -57,7 +57,7 @@ public class CarrierDelayReducer extends Reducer<Text, AverageDelayWritable, Tex
 		for(int i = 0; i < 10; i++) {
 			IntDoubleWordCount avg = sorting.get(sorting.size()-1-i);
 			String name = carrierMapping.get(avg.getWord());
-			String delay = String.format("Flights Delayed: %d Total Delay: %.0f" ,avg.getCount(), avg.getSum());
+			String delay = String.format("Flights Delayed: %d Total Delay: %.0f Average Delay: %.2f" ,avg.getCount(), avg.getSum(), (avg.getSum() / avg.getCount()));
 			context.write(new Text(Utils.reformatString(avg.getWord()+"\t"+name, 40)), new Text(delay));
 		}
 	}

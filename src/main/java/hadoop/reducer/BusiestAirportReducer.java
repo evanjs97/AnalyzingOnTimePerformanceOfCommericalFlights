@@ -70,7 +70,7 @@ public class BusiestAirportReducer extends Reducer<Text, IntTextWritable, Text, 
 			List<Map.Entry<String, Integer>> list = new ArrayList<>(entry.getValue().entrySet());
 			list.sort(Comparator.comparingInt(Map.Entry::getValue));
 			context.write(new Text("YEAR"), new IntWritable(entry.getKey()));
-			for(int i = list.size()-1; i > list.size() - 6; i--) {
+			for(int i = list.size()-1; i > list.size() - 11; i--) {
 				String name = codeMapping.get(list.get(i).getKey());
 				context.write(new Text(list.get(i).getKey()+" "+Utils.reformatString(name, 50)), new IntWritable(list.get(i).getValue()));
 			}

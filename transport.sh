@@ -20,6 +20,16 @@ elif [[ $USE_SHARED = "true" ]]
 	export $SHARED_COMMAND
 fi
 
+if [[ $JOB = "sumLate" ]]
+	then
+	if [[ $USE_SHARED = "true" ]]
+		then
+		INPUT_MAIN="/home/transport/late/"
+	else
+		INPUT_MAIN="/transport/late/"
+	fi
+fi
+
 CARRIERS="${INPUT_SUPPLEMENTARY}/carriers.csv"
 AIRPORTS="${INPUT_SUPPLEMENTARY}/airports.csv"
 
