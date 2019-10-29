@@ -18,8 +18,8 @@ public class LateAircraftSummarizeCombiner extends Reducer<Text, LateAircraftSum
 			numLateDelays += lasw.getNumLateDelays();
 			weatherDelaySum += lasw.getWeatherDelaySum();
 			numWeatherDelays += lasw.getNumWeatherDelays();
-			nasDelaySum += lasw.getWeatherDelaySum();
-			numNASDelays += lasw.getNumWeatherDelays();
+			nasDelaySum += lasw.getNASDelaySum();
+			numNASDelays += lasw.getNumNASDelays();
 			securityDelaySum += lasw.getSecurityDelaySum();
 			numSecurityDelays += lasw.getNumSecurityDelays();
 			carrierDelaySum += lasw.getCarrierDelaySum();

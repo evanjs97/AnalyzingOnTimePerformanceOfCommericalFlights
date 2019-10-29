@@ -24,6 +24,9 @@ public class LateAircraftSummarizeMapper extends Mapper<LongWritable, Text, Text
 			int secDelay = Integer.parseInt(prev[5]);
 			int nasDelay = Integer.parseInt(prev[6]);
 			int weatherDelay = Integer.parseInt(prev[7]);
+			LateAircraftSummarizeWritable temp = new LateAircraftSummarizeWritable(0, 0,
+                                                0, 0, 0, 0, 0,
+                                                0, 0, 0, 1);
 			if (lateDelay > 0 && (carrierDelay > 0 || secDelay > 0 || nasDelay > 0 || weatherDelay > 0)) {
 
 				LateAircraftSummarizeWritable lasw;
@@ -32,6 +35,7 @@ public class LateAircraftSummarizeMapper extends Mapper<LongWritable, Text, Text
 							0, 0, 0, 0,
 							0, carrierDelay, 1, 1);
 					context.write(new Text("C" + prev[9]), lasw);
+					context.write(new Text("A" + prev[10]), temp);
 				} else {
 					if (nasDelay >= secDelay && nasDelay >= weatherDelay) {
 						lasw = new LateAircraftSummarizeWritable(lateDelay, 1, 0,
@@ -47,14 +51,19 @@ public class LateAircraftSummarizeMapper extends Mapper<LongWritable, Text, Text
 								0, 0, 1);
 					}
 					context.write(new Text("A" + prev[10]), lasw);
+					context.write(new Text("C" + prev[9]), temp);
 				}
 			} else {
-				LateAircraftSummarizeWritable lasw = new LateAircraftSummarizeWritable(0, 0,
-						0, 0, 0, 0, 0,
-						0, 0, 0, 1);
-				context.write(new Text("C" + prev[9]), lasw);
-				context.write(new Text("A" + prev[10]), lasw);
+				//LateAircraftSummarizeWritable lasw = new LateAircraftSummarizeWritable(0, 0,
+						//0, 0, 0, 0, 0,
+						//0, 0, 0, 1);
+				context.write(new Text("C" + prev[9]), temp);
+				context.write(new Text("A" + prev[10]), temp);
 
+			}
+			if(i == line.length-1) {
+				context.write(new Text("C" + entry[9]), temp);
+				context.write(new Text("A" + entry[10]), temp);
 			}
 			prev = entry;
 		}

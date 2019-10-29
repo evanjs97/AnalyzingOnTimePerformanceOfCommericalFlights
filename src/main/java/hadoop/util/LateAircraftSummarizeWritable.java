@@ -43,7 +43,7 @@ public class LateAircraftSummarizeWritable implements Writable{
 		return numWeatherDelays.get();
 	}
 
-	public int getNasDelaySum() {
+	public int getNASDelaySum() {
 		return nasDelaySum.get();
 	}
 
